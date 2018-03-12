@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">SHHI</string>
+    <string name="username">username</string>
+    <string name="password">password</string>
+    <string name="login">login</string>
+    <string name="control_light">control light</string>
+    <string name="notification">notification</string>
+    <string name="sign_out">sign out</string>
+    <string name="clock_alarm">clock alarm</string>
+    <string name="manage_account">manage Account</string>
+    <string name="set">set</string>
+    <string name="unset">unset</string>
+    <string name="set_a_clock_alarm">set a clock alarm</string>
+    <string name="add_account">add account</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="light_1">light 1</string>
+    <string name="light_2">light 2</string>
+    <string name="light1">light1</string>
+    <string name="light2">light2</string>
+    <string name="admin">admin</string>
+    <string name="add">add</string>
+    <string name="email">Email</string>
+</resources>

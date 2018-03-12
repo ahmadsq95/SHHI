@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "552745095248",
+    "firebase_url": "https://shhi-bbcc7.firebaseio.com",
+    "project_id": "shhi-bbcc7",
+    "storage_bucket": "shhi-bbcc7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:552745095248:android:3fdc852d9f07aa9b",
+        "android_client_info": {
+          "package_name": "s.ahmadsq.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "552745095248-emri1a35vejh3sp6romcfnp5bue0uhab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0tnc6IFi_X3BZEKeOj0QIOk0jgr4QZpI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:552745095248:android:5059ed4d1ff361cb",
+        "android_client_info": {
+          "package_name": "s.ahmadsq.shhi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "552745095248-emri1a35vejh3sp6romcfnp5bue0uhab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0tnc6IFi_X3BZEKeOj0QIOk0jgr4QZpI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
