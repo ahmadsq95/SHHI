@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -43,6 +44,11 @@ public class clockAlarmActivity extends AppCompatActivity {
        final Vibrator vv = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         // initialize intent to the Alarm receiver
         final Intent AlarmReceiver_intent = new Intent(this.context, Alarm_Receiver.class);
+        // initialize label EditText
+        EditText labelEditText = findViewById(R.id.lableEditText);
+        final String label = labelEditText.getText().toString();
+
+
 
 
 
@@ -54,7 +60,7 @@ public class clockAlarmActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Vibrate for 500 milliseconds
-                vv.vibrate(500);
+                vv.vibrate(50);
 
 
                 // setting time that user input to calendar instance
@@ -81,6 +87,11 @@ public class clockAlarmActivity extends AppCompatActivity {
 
                 }
                     set_alarm_text("alarm set to "+hour_string+":"+minute_string+" "+AM_PM);
+                // put extra string into AlarmRecevier_intent
+                // tells the clock that you pressed the "set" button
+                AlarmReceiver_intent.putExtra("extra","alarm on");
+                AlarmReceiver_intent.putExtra("label",label);
+
 
                 // create a pending intent that delay intent
                 // until the specified time
@@ -104,11 +115,18 @@ public class clockAlarmActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Vibrate for 500 milliseconds
-                vv.vibrate(500);
+                vv.vibrate(50);
 
                 // cancel the alarm
                 alarmManager.cancel(pending_intent);
                 set_alarm_text("alarm off !");
+
+                // put extra string into AlarmRecevier_intent
+                // tells the clock that you pressed the "unset" button
+                AlarmReceiver_intent.putExtra("extra","alarm off");
+                AlarmReceiver_intent.putExtra("label","");
+                // stop the alarm when it alarming
+                sendBroadcast(AlarmReceiver_intent);
             }
         });
 

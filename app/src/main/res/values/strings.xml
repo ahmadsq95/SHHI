@@ -20,4 +20,6 @@
     <string name="admin">admin</string>
     <string name="add">add</string>
     <string name="email">Email</string>
+    <string name="app_icon">app icon</string>
+    <string name="set_a_label">set a label</string>
 </resources>

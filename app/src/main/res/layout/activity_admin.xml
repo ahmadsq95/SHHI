@@ -8,10 +8,17 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="359dp"
+        android:layout_height="674dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/app_icon"
+            app:srcCompat="@drawable/big_big_house" />
 
         <Button
             android:id="@+id/lightButt2"

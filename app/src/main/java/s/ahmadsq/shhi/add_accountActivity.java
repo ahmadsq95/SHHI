@@ -33,17 +33,17 @@ public class add_accountActivity extends AppCompatActivity {
         firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user!=null){
-                    //Intent log = new Intent(getApplicationContext(),adminActivity.class);
-                    //startActivity(log);
-                }
+
+
             }
         };
 
          final EditText Email = findViewById(R.id.emailAddAccountEditText);
         final EditText Password = findViewById(R.id.passwordAddAccountEditText);
+        final EditText username = findViewById(R.id.usernameEditText);
         final CheckBox admin = findViewById(R.id.AdminCheckBox);
+        final CheckBox light1 = findViewById(R.id.light1CheckBox);
+        final CheckBox light2 = findViewById(R.id.light2CheckBox);
         Button addButt = findViewById(R.id.addButt);
         final ProgressBar spinner = findViewById(R.id.progressBar2);
         spinner.setVisibility(View.GONE);
@@ -57,27 +57,74 @@ public class add_accountActivity extends AppCompatActivity {
                 final String email = Email.getText().toString();
                 final String password = Password.getText().toString();
 
+
+                // create the account
                 mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(add_accountActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()){
                             Toast.makeText(getBaseContext(),"add Account error",Toast.LENGTH_LONG).show();
-                            spinner.setVisibility(View.GONE);
+
                         }else{
                             Toast.makeText(getBaseContext(),"account added",Toast.LENGTH_LONG).show();
                             String user_id = mAuth.getCurrentUser().getUid();
+                           // add user Id to database
+                            DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id);
+                            current_user_db.setValue(true);
+                            // add email to database
+                            current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("email");
+                            current_user_db.setValue(email);
+                           // add username to database
+                            current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("username");
+                            current_user_db.setValue(username.getText().toString());
+                            // add password to database
+                            current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("username");
+                            current_user_db.setValue(Password.getText().toString());
+                                // add admin or user to database
                             if (admin.isChecked()){
-                                DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child("admin").child(user_id);
-                                current_user_db.setValue(true);
+                                current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("admin");
+                                current_user_db.setValue("yes");
                                 spinner.setVisibility(View.GONE);
                             }else {
-                                DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child("user").child(user_id);
-                                current_user_db.setValue(true);
+                                current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("admin");
+                                current_user_db.setValue("no");
                                 spinner.setVisibility(View.GONE);
+                            }
+                            // add light1 privilage to database
+                            if (light1.isChecked()){
+                                current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("light1");
+                                current_user_db.setValue("yes");
+                            }else{
+                                current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("light1");
+                                current_user_db.setValue("no");
+                            }
+                            // add light1 privilage to database
+                            if (light2.isChecked()){
+                                current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("light2");
+                                current_user_db.setValue("yes");
+                            }else{
+                                current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("light2");
+                                current_user_db.setValue("no");
                             }
                         }
                     }
                 });
+
+                /*
+                *
+                *         because Fire base is signing in the new user automatically we have to sign out
+                *         this new account and sign in with original account :)
+                *
+                 */
+
+                // sign out from the new user
+                mAuth.signOut();
+                //sign in with original user
+                EditText email1 = findViewById(R.id.emailEditText);
+                EditText password1 = findViewById(R.id.passwordEditText);
+                mAuth.signInWithEmailAndPassword(email1.getText().toString(),password1.getText().toString());
+
+                spinner.setVisibility(View.GONE);
 
             }
         });

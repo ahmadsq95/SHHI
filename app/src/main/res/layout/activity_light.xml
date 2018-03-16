@@ -7,8 +7,8 @@
     tools:context="s.ahmadsq.shhi.lightActivity">
 
     <TableLayout
-        android:layout_width="188dp"
-        android:layout_height="123dp"
+        android:layout_width="134dp"
+        android:layout_height="104dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

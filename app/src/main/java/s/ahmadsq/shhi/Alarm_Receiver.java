@@ -3,7 +3,6 @@ package s.ahmadsq.shhi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 /**
  * Created by ahmad on 3/6/2018.
@@ -12,6 +11,17 @@ import android.util.Log;
 public class Alarm_Receiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e("we are on a receiver.", " Yay!");
+
+
+        // get extra string from intent
+        String extra_string = intent.getExtras().getString("extra");
+        String label = intent.getExtras().getString("label");
+        Intent service_intent = new Intent(context,ClockAlarmService.class);
+
+        // pass extra string from clockAlarmActivity to RingTonePlaying service
+        service_intent.putExtra("extra",extra_string);
+        service_intent.putExtra("label", label);
+
+        context.startService(service_intent);
     }
 }
