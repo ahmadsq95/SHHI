@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class adminActivity extends AppCompatActivity {
 
@@ -72,6 +73,7 @@ public class adminActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mAuth.signOut();
+                FirebaseMessaging.getInstance().unsubscribeFromTopic("arduino");
                 Intent signOut = new Intent(getApplicationContext(), loginActivity.class);
                 startActivity(signOut);
             }

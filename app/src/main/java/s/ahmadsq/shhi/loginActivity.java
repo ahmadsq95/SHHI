@@ -35,8 +35,7 @@ public class loginActivity extends AppCompatActivity {
         final EditText passwordEditText = findViewById(R.id.passwordEditText);
         final ProgressBar spinner;
 
-        // subscribe to topic that get the notification
-        FirebaseMessaging.getInstance().subscribeToTopic("arduino");
+
         mAuth = FirebaseAuth.getInstance();
 
         // checking if user is already signed in
@@ -46,10 +45,33 @@ public class loginActivity extends AppCompatActivity {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
             if (user!=null){
+                String user_id = mAuth.getCurrentUser().getUid();
+                DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("admin");
+                current_user_db.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String admin = dataSnapshot.getValue(String.class);
+                        if (admin.equals("yes")){
 
-                    Intent log = new Intent(getApplicationContext(), adminActivity.class);
-                    startActivity(log);
+                            FirebaseMessaging.getInstance().subscribeToTopic("arduino");
+                            Intent log = new Intent(getApplicationContext(),adminActivity.class);
+                            startActivity(log);
+                        }
+                        else {
 
+
+                            FirebaseMessaging.getInstance().subscribeToTopic("arduino");
+                            Intent log = new Intent(getApplicationContext(),MainActivity.class);
+                            startActivity(log);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
             }
         };
@@ -72,9 +94,35 @@ public class loginActivity extends AppCompatActivity {
                             spinner.setVisibility(View.GONE);
                         }
                         else {
+                            String user_id = mAuth.getCurrentUser().getUid();
+                            DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("admin");
+                            current_user_db.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    String admin = dataSnapshot.getValue(String.class);
+                                    if (admin.equals("yes")){
 
-                            Intent log = new Intent(getApplicationContext(),adminActivity.class);
-                            startActivity(log);
+                                        spinner.setVisibility(View.GONE);
+                                        FirebaseMessaging.getInstance().subscribeToTopic("arduino");
+                                        Intent log = new Intent(getApplicationContext(),adminActivity.class);
+                                        startActivity(log);
+                                    }
+                                    else {
+
+                                        spinner.setVisibility(View.GONE);
+                                        FirebaseMessaging.getInstance().subscribeToTopic("arduino");
+                                        Intent log = new Intent(getApplicationContext(),MainActivity.class);
+                                        startActivity(log);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
 
                         }
                     }

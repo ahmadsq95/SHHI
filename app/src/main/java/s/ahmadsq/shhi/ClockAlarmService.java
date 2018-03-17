@@ -6,10 +6,23 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.IBinder;
+import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ClockAlarmService extends Service {
@@ -26,12 +39,13 @@ public class ClockAlarmService extends Service {
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         // get extra string from alarm receiver
         String state = intent.getExtras().getString("extra");
-        String label = intent.getExtras().getString("label");
+
 
 
 
@@ -58,8 +72,15 @@ public class ClockAlarmService extends Service {
 
             mp = MediaPlayer.create(this , R.raw.alarm_clock);
             mp.start();
+            mp.setLooping(true);
             vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-            vibrator.vibrate(8000);
+
+
+               vibrator.vibrate(800000000);
+
+               // turn on house clock light
+               requestArduinoLight("clock alarm", "on");
+
             this.isRunning = true;
             this.startId = 0 ;
 
@@ -90,6 +111,8 @@ public class ClockAlarmService extends Service {
             mp.stop();
             mp.reset();
             vibrator.cancel();
+           // turn off house clock light
+            requestArduinoLight("clock alarm", "off");
             isRunning = false;
             this.startId = 1 ;
         }
@@ -103,6 +126,7 @@ public class ClockAlarmService extends Service {
 
             this.isRunning = false ;
             this.startId = 0;
+
 
 
         }
@@ -125,9 +149,31 @@ public class ClockAlarmService extends Service {
 
     }
 
-    public void requestArduinoLight (){
+    public void requestArduinoLight (final String clockLight, final String command){
 
 
+       StringRequest requset = new StringRequest(Request.Method.POST, "http://192.168.1.111", new Response.Listener<String>() {
+           @Override
+           public void onResponse(String response) {
+                // here get json object to know if light set on or off , just to know it
+           }
+       }, new Response.ErrorListener() {
+           @Override
+           public void onErrorResponse(VolleyError error) {
+               Toast.makeText(getApplicationContext(),"Error to connect the server", Toast.LENGTH_LONG).show();
+
+           }
+       }){
+            protected Map<String,String> getParams() throws AuthFailureError {
+                HashMap<String,String> map=new HashMap<>();
+                map.put("light",clockLight);
+                map.put("command",command);
+                return map;
+            }
+
+
+       };
+        Singleton_Queue.getInstance(getBaseContext()).Add(requset);
     }
 
 

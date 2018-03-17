@@ -15,13 +15,11 @@ public class Alarm_Receiver extends BroadcastReceiver {
 
         // get extra string from intent
         String extra_string = intent.getExtras().getString("extra");
-        String label = intent.getExtras().getString("label");
+
         Intent service_intent = new Intent(context,ClockAlarmService.class);
 
         // pass extra string from clockAlarmActivity to RingTonePlaying service
         service_intent.putExtra("extra",extra_string);
-        service_intent.putExtra("label", label);
-
-        context.startService(service_intent);
+         context.startService(service_intent);
     }
 }

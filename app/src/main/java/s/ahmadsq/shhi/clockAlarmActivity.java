@@ -44,9 +44,7 @@ public class clockAlarmActivity extends AppCompatActivity {
        final Vibrator vv = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         // initialize intent to the Alarm receiver
         final Intent AlarmReceiver_intent = new Intent(this.context, Alarm_Receiver.class);
-        // initialize label EditText
-        EditText labelEditText = findViewById(R.id.lableEditText);
-        final String label = labelEditText.getText().toString();
+
 
 
 
@@ -90,7 +88,7 @@ public class clockAlarmActivity extends AppCompatActivity {
                 // put extra string into AlarmRecevier_intent
                 // tells the clock that you pressed the "set" button
                 AlarmReceiver_intent.putExtra("extra","alarm on");
-                AlarmReceiver_intent.putExtra("label",label);
+
 
 
                 // create a pending intent that delay intent
@@ -124,7 +122,6 @@ public class clockAlarmActivity extends AppCompatActivity {
                 // put extra string into AlarmRecevier_intent
                 // tells the clock that you pressed the "unset" button
                 AlarmReceiver_intent.putExtra("extra","alarm off");
-                AlarmReceiver_intent.putExtra("label","");
                 // stop the alarm when it alarming
                 sendBroadcast(AlarmReceiver_intent);
             }

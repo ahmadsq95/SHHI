@@ -6,11 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
+
 public class MainActivity extends AppCompatActivity {
 
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
         Button clockAlarmButt = findViewById(R.id.clockButt);
         Button notificationButt = findViewById(R.id.notificationButt);
@@ -63,7 +68,8 @@ public class MainActivity extends AppCompatActivity {
         signOutButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                mAuth.signOut();
+                FirebaseMessaging.getInstance().unsubscribeFromTopic("arduino");
                 Intent log = new Intent(getApplicationContext(),loginActivity.class);
                 startActivity(log);
 
