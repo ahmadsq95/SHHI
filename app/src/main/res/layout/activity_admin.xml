@@ -20,6 +20,12 @@
             android:contentDescription="@string/app_icon"
             app:srcCompat="@drawable/big_big_house" />
 
+        <TextView
+            android:id="@+id/welcomeTextView"
+            android:layout_width="183dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
         <Button
             android:id="@+id/lightButt2"
             android:layout_width="match_parent"

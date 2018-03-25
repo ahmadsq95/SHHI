@@ -16,8 +16,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class add_accountActivity extends AppCompatActivity {
 
@@ -49,6 +53,26 @@ public class add_accountActivity extends AppCompatActivity {
         spinner.setVisibility(View.GONE);
 
 
+      // get admin email and password to sign in later after create new account
+        String current_admin_id = mAuth.getCurrentUser().getUid();
+        DatabaseReference current_admin_db = FirebaseDatabase.getInstance().getReference().child("account").child(current_admin_id);
+        final String[] adminEmail = new String[1];
+        final String[] adminPassword = new String[1];
+        current_admin_db.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                adminEmail[0] = dataSnapshot.child("email").getValue(String.class);
+                adminPassword[0] = dataSnapshot.child("password").getValue(String.class);
+                Toast.makeText(getApplicationContext(),"user email "+adminEmail[0],Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
         addButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +102,7 @@ public class add_accountActivity extends AppCompatActivity {
                             current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("username");
                             current_user_db.setValue(username.getText().toString());
                             // add password to database
-                            current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("username");
+                            current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("password");
                             current_user_db.setValue(Password.getText().toString());
                                 // add admin or user to database
                             if (admin.isChecked()){
@@ -110,6 +134,9 @@ public class add_accountActivity extends AppCompatActivity {
                     }
                 });
 
+
+
+
                 /*
                 *
                 *         because Fire base is signing in the new user automatically we have to sign out
@@ -120,11 +147,12 @@ public class add_accountActivity extends AppCompatActivity {
                 // sign out from the new user
                 mAuth.signOut();
                 //sign in with original user
-                EditText email1 = findViewById(R.id.emailEditText);
-                EditText password1 = findViewById(R.id.passwordEditText);
-                mAuth.signInWithEmailAndPassword(email1.getText().toString(),password1.getText().toString());
+              //  EditText email1 = findViewById(R.id.emailEditText);
+               // EditText password1 = findViewById(R.id.passwordEditText);
 
-                spinner.setVisibility(View.GONE);
+
+                        mAuth.signInWithEmailAndPassword(adminEmail[0],adminPassword[0]);
+                            spinner.setVisibility(View.GONE);
 
             }
         });

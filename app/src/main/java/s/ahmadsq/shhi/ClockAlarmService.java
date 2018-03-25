@@ -24,6 +24,8 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.support.v4.app.NotificationCompat.PRIORITY_MAX;
+
 
 public class ClockAlarmService extends Service {
 
@@ -97,6 +99,7 @@ public class ClockAlarmService extends Service {
                     .setContentTitle("SHHI")
                     .setContentText("Clack Alarm !")
                     .setAutoCancel(true)
+                    .setPriority(PRIORITY_MAX)
                     .setContentIntent(notification_pending_intent);
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

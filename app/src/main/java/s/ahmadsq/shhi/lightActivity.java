@@ -2,6 +2,9 @@ package s.ahmadsq.shhi;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -22,37 +25,82 @@ import java.util.Map;
 
 public class lightActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    ToggleButton light1ToggleButt;
+    ToggleButton light2ToggleButt;
+    TextView light1TextView;
+    TextView light2TextView;
+    String user_id ;
+    DatabaseReference user_db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_light);
 
-        ToggleButton light1ToggleButt = findViewById(R.id.light1toggleButton);
-        ToggleButton light2ToggleButt = findViewById(R.id.light2toggleButton);
+         light1ToggleButt = findViewById(R.id.light1toggleButton);
+         light2ToggleButt = findViewById(R.id.light2toggleButton);
+         light1TextView = findViewById(R.id.light1textView);
+         light2TextView = findViewById(R.id.light2textView);
 
 
-        mAuth = FirebaseAuth.getInstance();
-        check_privilege();
+         lightState();
+         checkPrivilege();
+
+
+
+
+         light1ToggleButt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    send_request("light1","on");
+
+                }else if (!isChecked){
+                    send_request("light1","off");
+                }
+            }
+        });
+
+        light2ToggleButt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    send_request("light2","on");
+                }else if (!isChecked){
+                    send_request("light2","off");
+                }
+            }
+        });
 
 
 
     }
 
 
+    public void checkPrivilege (){
 
 
-
-    //checking if user have the privilege to control the light
-    public void check_privilege () {
-        String user_id = mAuth.getCurrentUser().getUid();
-        DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id);
-        current_user_db.addListenerForSingleValueEvent(new ValueEventListener() {
+        user_id = mAuth.getCurrentUser().getUid();
+        user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id);
+        user_db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String light1 = dataSnapshot.child("light1").getValue(String.class);
                 String light2 = dataSnapshot.child("light2").getValue(String.class);
+                if (light1.equals("yes")){
+                    light1ToggleButt.setVisibility(View.VISIBLE);
+                    light1TextView.setVisibility(View.VISIBLE);
+                }else {
+                    light1ToggleButt.setVisibility(View.GONE);
+                    light1TextView.setVisibility(View.GONE);
+                }
 
-
+                if (light2.equals("yes")){
+                    light2ToggleButt.setVisibility(View.VISIBLE);
+                    light2TextView.setVisibility(View.VISIBLE);
+                }else {
+                    light2ToggleButt.setVisibility(View.GONE);
+                    light2TextView.setVisibility(View.GONE);
+                }
 
             }
 
@@ -62,7 +110,39 @@ public class lightActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
+
+// get the state of light to set the toggle button to on or off
+    public void lightState (){
+        mAuth = FirebaseAuth.getInstance();
+        DatabaseReference lighDb = FirebaseDatabase.getInstance().getReference().child("light");
+        lighDb.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String light1 = dataSnapshot.child("light1").getValue(String.class);
+                String light2 = dataSnapshot.child("light2").getValue(String.class);
+                if (light1.equals("on")){
+                    light1ToggleButt.setChecked(true);
+                }else {
+                    light1ToggleButt.setChecked(false);
+                }
+                if (light2.equals("on")){
+                    light2ToggleButt.setChecked(true);
+                }else{
+                    light2ToggleButt.setChecked(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
 
 
     // request Arduino to control the light

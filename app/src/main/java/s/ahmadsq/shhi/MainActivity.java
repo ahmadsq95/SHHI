@@ -5,8 +5,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,11 +22,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
+
         setContentView(R.layout.activity_main);
         Button clockAlarmButt = findViewById(R.id.clockButt);
         Button notificationButt = findViewById(R.id.notificationButt);
         Button lightButt = findViewById(R.id.lightButt);
         Button signOutButt = findViewById(R.id.signoutButt);
+        final TextView welcomeTextView = findViewById(R.id.welcomeTextView);
+        String user_id = mAuth.getCurrentUser().getUid();
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("account").child(user_id);
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String username = dataSnapshot.child("username").getValue(String.class);
+                welcomeTextView.setText("welcome back "+username);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         clock(clockAlarmButt);
         notification(notificationButt);

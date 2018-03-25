@@ -5,8 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class adminActivity extends AppCompatActivity {
@@ -22,11 +28,28 @@ public class adminActivity extends AppCompatActivity {
         Button signoutButtAdmin = findViewById(R.id.signoutButt2);
         Button manageButt = findViewById(R.id.manageButt);
         mAuth = FirebaseAuth.getInstance();
+        final TextView welcomeTextView = findViewById(R.id.welcomeTextView);
+        String user_id = mAuth.getCurrentUser().getUid();
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("account").child(user_id);
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String username = dataSnapshot.child("username").getValue(String.class);
+                welcomeTextView.setText("welcome back "+username);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         clock(clockButtAdmin);
         notification(notifiButtAdmin);
         light(lightButtAdmin);
         manage(manageButt);
         signOut(signoutButtAdmin);
+
+
 
     }
 
