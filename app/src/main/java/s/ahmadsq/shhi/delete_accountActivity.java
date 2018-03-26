@@ -1,11 +1,14 @@
 package s.ahmadsq.shhi;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -62,7 +65,6 @@ public class delete_accountActivity extends AppCompatActivity {
             Map singleUser = (Map) entry.getValue();
             userList.add((String) singleUser.get("username"));
 
-            // here will add the all data in listView ((NEED TO MODIFY IT))
             list.add(notification.toString());
             adapter.notifyDataSetChanged();
         }
@@ -70,9 +72,50 @@ public class delete_accountActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                AlertDialog diaBox = AskOption((String) listView.getItemAtPosition(position));
+                diaBox.show();
             }
         });
+
+    }
+
+    private AlertDialog AskOption(final String user)
+    {
+        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+                //set message, title, and icon
+                .setTitle("Delete user")
+                .setMessage("Do you want to Delete "+user+" ?")
+                .setIcon(R.drawable.delete)
+
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        deleteUser(user);
+                        dialog.dismiss();
+
+                    }
+
+                })
+
+
+
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+        return myQuittingDialogBox;
+
+    }
+
+    private void deleteUser (String user){
+
+        Toast.makeText(getApplicationContext(),user + " deleted",Toast.LENGTH_SHORT).show();
+
 
     }
 }

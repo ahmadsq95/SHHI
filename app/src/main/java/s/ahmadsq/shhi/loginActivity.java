@@ -3,13 +3,13 @@ package s.ahmadsq.shhi;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.constraint.solver.widgets.Snapshot;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -25,67 +25,34 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class loginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
+    ProgressBar spinner;
+    Button loginButt;
+    EditText emailEditText;
+    EditText passwordEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
+        checkUser();
+
+        setTheme(R.style.dark);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Button loginButt = findViewById(R.id.loginButt);
-        final EditText emailEditText = findViewById(R.id.emailEditText);
-        final EditText passwordEditText = findViewById(R.id.passwordEditText);
-        final ProgressBar spinner;
-
-
-        mAuth = FirebaseAuth.getInstance();
-
-        // checking if user is already signed in
-        firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-            if (user!=null){
-                String user_id = mAuth.getCurrentUser().getUid();
-                DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("admin");
-                current_user_db.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String admin = dataSnapshot.getValue(String.class);
-                        if (admin.equals("yes")){
-
-                            FirebaseMessaging.getInstance().subscribeToTopic("arduino");
-                            Intent log = new Intent(getApplicationContext(),adminActivity.class);
-                            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(log);
-                        }
-                        else {
-
-
-                            FirebaseMessaging.getInstance().subscribeToTopic("arduino");
-                            Intent log = new Intent(getApplicationContext(),MainActivity.class);
-                            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(log);
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            } else {
-                setTheme(R.style.dark);
-            }
-            }
-        };
-
+        loginButt = findViewById(R.id.loginButt);
+        emailEditText = findViewById(R.id.emailEditText);
+        passwordEditText = findViewById(R.id.passwordEditText);
         spinner = findViewById(R.id.progressBar);
+        login();
+
+
+
+    }
+
+    public void login (){
+
         spinner.setVisibility(View.GONE);
-
-
-
+        mAuth = FirebaseAuth.getInstance();
         loginButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,10 +104,55 @@ public class loginActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
 
+    public void checkUser (){
+
+        mAuth = FirebaseAuth.getInstance();
+
+        // checking if user is already signed in
+        firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                if (user!=null){
+                    String user_id = mAuth.getCurrentUser().getUid();
+                    DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("admin");
+                    current_user_db.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String admin = dataSnapshot.getValue(String.class);
+                            if (admin.equals("yes")){
+
+                                FirebaseMessaging.getInstance().subscribeToTopic("arduino");
+                                Intent log = new Intent(getApplicationContext(),adminActivity.class);
+                                log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(log);
+                            }
+                            else {
+
+
+                                FirebaseMessaging.getInstance().subscribeToTopic("arduino");
+                                Intent log = new Intent(getApplicationContext(),MainActivity.class);
+                                log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(log);
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                } else {
+                    setTheme(R.style.dark);
+                }
+            }
+        };
+    }
 
     @Override
     protected void onStart() {

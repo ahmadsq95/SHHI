@@ -49,17 +49,23 @@ public class lightActivity extends AppCompatActivity {
          lightState();
          checkPrivilege();
 
+         toggleButt();
 
-         light1ToggleButt.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 if (light1ToggleButt.isChecked()){
-                     send_request("light1","on");
-                 }else if (!light1ToggleButt.isChecked()){
-                     send_request("light1","off");
-                 }
-             }
-         });
+
+    }
+    public void toggleButt (){
+
+
+        light1ToggleButt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (light1ToggleButt.isChecked()){
+                    send_request("light1","on");
+                }else if (!light1ToggleButt.isChecked()){
+                    send_request("light1","off");
+                }
+            }
+        });
 
 
         light2ToggleButt.setOnClickListener(new View.OnClickListener() {
