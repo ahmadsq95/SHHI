@@ -102,6 +102,7 @@ public class ClockAlarmService extends Service {
                     .setPriority(PRIORITY_MAX)
                     .setContentIntent(notification_pending_intent);
 
+
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(0, notificationBuilder.build());
 
