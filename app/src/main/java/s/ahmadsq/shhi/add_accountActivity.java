@@ -42,7 +42,7 @@ public class add_accountActivity extends AppCompatActivity {
             }
         };
 
-         final EditText Email = findViewById(R.id.emailAddAccountEditText);
+        final EditText Email = findViewById(R.id.emailAddAccountEditText);
         final EditText Password = findViewById(R.id.passwordAddAccountEditText);
         final EditText username = findViewById(R.id.usernameEditText);
         final CheckBox admin = findViewById(R.id.AdminCheckBox);

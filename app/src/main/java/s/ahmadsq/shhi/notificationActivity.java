@@ -49,18 +49,19 @@ public class notificationActivity extends AppCompatActivity {
     public void collectNotificationInfo (Map<String,Object> notification){
 
 
-
+        ArrayList<String> notificationList = new ArrayList<>();
         listView = findViewById(R.id.listView);
-        adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, list);
+        adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, notificationList);
         listView.setAdapter(adapter);
 
 
-        ArrayList<String> notificationList = new ArrayList<>();
+
 
         for (Map.Entry<String,Object> entry : notification.entrySet()){
 
             Map singleNotification = (Map) entry.getValue();
             notificationList.add((String) singleNotification.get("Type"));
+
 
             list.add(notification.toString());
             adapter.notifyDataSetChanged();

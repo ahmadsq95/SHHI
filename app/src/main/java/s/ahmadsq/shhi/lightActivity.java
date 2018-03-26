@@ -37,45 +37,45 @@ public class lightActivity extends AppCompatActivity {
         setContentView(R.layout.activity_light);
 
          light1ToggleButt = findViewById(R.id.light1toggleButton);
+         light1ToggleButt.setVisibility(View.GONE);
          light2ToggleButt = findViewById(R.id.light2toggleButton);
+         light2ToggleButt.setVisibility(View.GONE);
          light1TextView = findViewById(R.id.light1textView);
+         light1TextView.setVisibility(View.GONE);
          light2TextView = findViewById(R.id.light2textView);
+         light2TextView.setVisibility(View.GONE);
 
 
          lightState();
          checkPrivilege();
 
 
+         light1ToggleButt.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 if (light1ToggleButt.isChecked()){
+                     send_request("light1","on");
+                 }else if (!light1ToggleButt.isChecked()){
+                     send_request("light1","off");
+                 }
+             }
+         });
 
 
-         light1ToggleButt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        light2ToggleButt.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    send_request("light1","on");
-
-                }else if (!isChecked){
-                    send_request("light1","off");
-                }
-            }
-        });
-
-        light2ToggleButt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+            public void onClick(View v) {
+                if (light2ToggleButt.isChecked()){
                     send_request("light2","on");
-                }else if (!isChecked){
+                }else if (!light2ToggleButt.isChecked()){
                     send_request("light2","off");
                 }
             }
         });
 
-
-
     }
 
-
+    // check if user have access to control the light if is set the button visible otherwise set it invisible
     public void checkPrivilege (){
 
 
@@ -114,7 +114,7 @@ public class lightActivity extends AppCompatActivity {
 
     }
 
-// get the state of light to set the toggle button to on or off
+    // get the state of light to set the toggle button to on or off
     public void lightState (){
         mAuth = FirebaseAuth.getInstance();
         DatabaseReference lighDb = FirebaseDatabase.getInstance().getReference().child("light");
@@ -142,8 +142,6 @@ public class lightActivity extends AppCompatActivity {
         });
 
     }
-
-
 
     // request Arduino to control the light
     public void send_request (final String lightNo , final String command){

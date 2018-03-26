@@ -28,6 +28,7 @@ public class loginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Button loginButt = findViewById(R.id.loginButt);
@@ -55,6 +56,7 @@ public class loginActivity extends AppCompatActivity {
 
                             FirebaseMessaging.getInstance().subscribeToTopic("arduino");
                             Intent log = new Intent(getApplicationContext(),adminActivity.class);
+                            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(log);
                         }
                         else {
@@ -62,6 +64,7 @@ public class loginActivity extends AppCompatActivity {
 
                             FirebaseMessaging.getInstance().subscribeToTopic("arduino");
                             Intent log = new Intent(getApplicationContext(),MainActivity.class);
+                            log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(log);
                         }
 
@@ -72,6 +75,8 @@ public class loginActivity extends AppCompatActivity {
 
                     }
                 });
+            } else {
+                setTheme(R.style.dark);
             }
             }
         };
@@ -105,6 +110,7 @@ public class loginActivity extends AppCompatActivity {
                                         spinner.setVisibility(View.GONE);
                                         FirebaseMessaging.getInstance().subscribeToTopic("arduino");
                                         Intent log = new Intent(getApplicationContext(),adminActivity.class);
+                                        log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(log);
                                     }
                                     else {
@@ -112,6 +118,7 @@ public class loginActivity extends AppCompatActivity {
                                         spinner.setVisibility(View.GONE);
                                         FirebaseMessaging.getInstance().subscribeToTopic("arduino");
                                         Intent log = new Intent(getApplicationContext(),MainActivity.class);
+                                        log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(log);
                                     }
 

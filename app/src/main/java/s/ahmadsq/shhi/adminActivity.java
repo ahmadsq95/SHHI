@@ -35,7 +35,7 @@ public class adminActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String username = dataSnapshot.child("username").getValue(String.class);
-                welcomeTextView.setText("welcome back "+username);
+                welcomeTextView.setText(username);
             }
 
             @Override

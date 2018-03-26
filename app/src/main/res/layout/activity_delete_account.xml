@@ -6,4 +6,14 @@
     android:layout_height="match_parent"
     tools:context="s.ahmadsq.shhi.delete_accountActivity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>

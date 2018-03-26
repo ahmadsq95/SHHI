@@ -22,4 +22,5 @@
     <string name="email">Email</string>
     <string name="app_icon">app icon</string>
     <string name="set_a_label">set a label</string>
+    <string name="light_icon">light_icon</string>
 </resources>

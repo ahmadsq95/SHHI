@@ -22,9 +22,10 @@
 
         <TextView
             android:id="@+id/welcomeTextView"
-            android:layout_width="183dp"
+            android:layout_width="178dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:textSize="23sp" />
 
         <Button
             android:id="@+id/lightButt2"
