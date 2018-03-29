@@ -75,10 +75,19 @@ public class ClockAlarmService extends Service {
             mp = MediaPlayer.create(this , R.raw.alarm_clock);
             mp.start();
             mp.setLooping(true);
+
             vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
 
+            int vab = 300;
+            int gap = 300;
+            long[] pattern = {
+                    0,  // Start immediately
+                    vab, gap
+            };
+            vibrator.vibrate(pattern,1); // 1 is for repeat like a loop
 
-               vibrator.vibrate(800000000);
+
+
 
                // turn on house clock light
                requestArduinoLight("clock alarm", "on");
@@ -105,6 +114,9 @@ public class ClockAlarmService extends Service {
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(0, notificationBuilder.build());
+
+
+
 
 
         }

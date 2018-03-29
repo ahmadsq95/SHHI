@@ -7,26 +7,29 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:allowBackup="true"
         android:icon="@drawable/house"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/dark">
-        <activity android:name=".loginActivity"
+        <activity android:name=".splash_screenActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".loginActivity" />
         <activity android:name=".lightActivity" />
         <activity android:name=".notificationActivity" />
         <activity android:name=".manageActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".adminActivity"
-            android:theme="@style/dark" />
+        <activity android:name=".clockAlarmActivity" />
+        <activity android:name=".adminActivity" />
+        <activity android:name=".add_accountActivity" />
+        <activity android:name=".delete_accountActivity" />
+
+
 
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
@@ -34,16 +37,12 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".clockAlarmActivity" />
-
-        <receiver android:name=".Alarm_Receiver" />
-
         <service
             android:name=".ClockAlarmService"
             android:enabled="true" />
 
-        <activity android:name=".add_accountActivity" />
-        <activity android:name=".delete_accountActivity"></activity>
+        <receiver android:name=".Alarm_Receiver" />
+
     </application>
 
 </manifest>

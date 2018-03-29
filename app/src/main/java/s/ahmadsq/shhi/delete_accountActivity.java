@@ -10,10 +10,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -114,8 +116,6 @@ public class delete_accountActivity extends AppCompatActivity {
 
     private void deleteUser (String user){
 
-        Toast.makeText(getApplicationContext(),user + " deleted",Toast.LENGTH_SHORT).show();
-
-
     }
+
 }
