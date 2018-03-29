@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,19 +38,15 @@ public class delete_accountActivity extends AppCompatActivity {
     String adminPassword;
     FirebaseAuth mAuth;
     Button deleteButt ;
-    FirebaseAuth.AuthStateListener firebaseAuthListener;
+
+    ProgressBar spinner ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_account);
+        spinner = findViewById(R.id.progressBar10);
+        spinner.setVisibility(View.GONE);
 
-        firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-
-
-            }
-        };
 
 
 
@@ -67,8 +64,6 @@ public class delete_accountActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 adminEmail = dataSnapshot.child("email").getValue(String.class);
                 adminPassword = dataSnapshot.child("password").getValue(String.class);
-                Toast.makeText(getApplicationContext(), adminEmail+adminPassword,Toast.LENGTH_SHORT).show();
-
             }
 
             @Override
@@ -81,14 +76,20 @@ public class delete_accountActivity extends AppCompatActivity {
         deleteButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 deleteUser(emailEditText.getText().toString(),passwordEditText.getText().toString());
+
             }
         });
 
 
 
 
+             getData();
 
+    }
+
+    public void getData (){
 
         dref = FirebaseDatabase.getInstance().getReference().child("account");
         dref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -133,7 +134,7 @@ public class delete_accountActivity extends AppCompatActivity {
     }
 
     private void deleteUser (String email , String password){
-
+        spinner.setVisibility(View.VISIBLE);
 
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -148,21 +149,28 @@ public class delete_accountActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                        if (task.isSuccessful()){
+                           Toast.makeText(getApplicationContext(),"Account deleted",Toast.LENGTH_SHORT).show();
+                           Toast.makeText(getApplicationContext(),"Trying to delete user information from database...",Toast.LENGTH_SHORT).show();
+                           mAuth.signInWithEmailAndPassword(adminEmail,adminPassword);
                            user_db.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                                @Override
                                public void onComplete(@NonNull Task<Void> task) {
                                    if (task.isSuccessful()){
-                                       Toast.makeText(getApplicationContext()," and account information deleted from database",Toast.LENGTH_SHORT).show();
+                                       spinner.setVisibility(View.GONE);
+                                       Toast.makeText(getApplicationContext(),"...and account information deleted from database",Toast.LENGTH_SHORT).show();
                                    }else {
+                                       spinner.setVisibility(View.GONE);
                                        Toast.makeText(getApplicationContext()," Error on delete account information from database",Toast.LENGTH_SHORT).show();
                                    }
                                }
                            });
-                           mAuth.signInWithEmailAndPassword(adminEmail,adminPassword);
-                           Toast.makeText(getApplicationContext(),"Account deleted",Toast.LENGTH_SHORT).show();
+
+
                        }else {
                            mAuth.signInWithEmailAndPassword(adminEmail,adminPassword);
                            Toast.makeText(getApplicationContext(),"Error deleteing user",Toast.LENGTH_SHORT).show();
+
+                           spinner.setVisibility(View.GONE);
                        }
 
                     }
@@ -170,23 +178,12 @@ public class delete_accountActivity extends AppCompatActivity {
             } else {
                     mAuth.signInWithEmailAndPassword(adminEmail,adminPassword);
                     Toast.makeText(getApplicationContext(), "Email or password is wrong",Toast.LENGTH_SHORT).show();
+                    spinner.setVisibility(View.GONE);
                 }
         }
 
         });
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(firebaseAuthListener);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mAuth.removeAuthStateListener(firebaseAuthListener);
     }
 
 }

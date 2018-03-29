@@ -26,7 +26,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class add_accountActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener firebaseAuthListener;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -34,14 +33,6 @@ public class add_accountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_account);
         mAuth = FirebaseAuth.getInstance();
-        firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-
-
-            }
-        };
-
         final EditText Email = findViewById(R.id.emailAddAccountEditText);
         final EditText Password = findViewById(R.id.passwordAddAccountEditText);
         final EditText username = findViewById(R.id.usernameEditText);
@@ -160,15 +151,4 @@ public class add_accountActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(firebaseAuthListener);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mAuth.removeAuthStateListener(firebaseAuthListener);
-    }
 }

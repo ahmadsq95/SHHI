@@ -45,10 +45,13 @@ public class lightActivity extends AppCompatActivity {
          light2TextView = findViewById(R.id.light2textView);
          light2TextView.setVisibility(View.GONE);
 
-
+        // check light state if light 1 is on set light 1 toggle button on
          lightState();
+        // show Button if user have privilege otherwise hide it :)
          checkPrivilege();
-
+         // on click listener for toggle button
+        // we don't use on change state listener, because we change the state of the listener
+        // and that cause of sending request every time the state is change
          toggleButt();
 
 

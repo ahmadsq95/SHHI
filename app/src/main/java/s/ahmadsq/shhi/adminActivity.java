@@ -18,17 +18,23 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class adminActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private Button clockButtAdmin;
+    private Button notifiButtAdmin;
+    private Button lightButtAdmin;
+    private Button signoutButtAdmin;
+    private Button manageButt;
+    private TextView welcomeTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
-        Button clockButtAdmin = findViewById(R.id.clockButt2);
-        Button notifiButtAdmin = findViewById(R.id.notificationButt2);
-        Button lightButtAdmin = findViewById(R.id.lightButt2);
-        Button signoutButtAdmin = findViewById(R.id.signoutButt2);
-        Button manageButt = findViewById(R.id.manageButt);
+        clockButtAdmin = findViewById(R.id.clockButt2);
+        notifiButtAdmin = findViewById(R.id.notificationButt2);
+        lightButtAdmin = findViewById(R.id.lightButt2);
+        signoutButtAdmin = findViewById(R.id.signoutButt2);
+        manageButt = findViewById(R.id.manageButt);
         mAuth = FirebaseAuth.getInstance();
-        final TextView welcomeTextView = findViewById(R.id.welcomeTextView);
+        welcomeTextView = findViewById(R.id.welcomeTextView);
         String user_id = mAuth.getCurrentUser().getUid();
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("account").child(user_id);
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -43,19 +49,19 @@ public class adminActivity extends AppCompatActivity {
 
             }
         });
-        clock(clockButtAdmin);
-        notification(notifiButtAdmin);
-        light(lightButtAdmin);
-        manage(manageButt);
-        signOut(signoutButtAdmin);
+        clock();
+        notification();
+        light();
+        manage();
+        signOut();
 
 
 
     }
 
-    protected void light(Button lightButt) {
+    protected void light() {
 
-        lightButt.setOnClickListener(new View.OnClickListener() {
+        lightButtAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent light = new Intent(getApplicationContext(), lightActivity.class);
@@ -64,9 +70,9 @@ public class adminActivity extends AppCompatActivity {
         });
     }
 
-    protected void notification(Button notificationButt) {
+    protected void notification() {
 
-        notificationButt.setOnClickListener(new View.OnClickListener() {
+        notifiButtAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -78,9 +84,9 @@ public class adminActivity extends AppCompatActivity {
 
     }
 
-    protected void clock(Button clockAlarmButt) {
+    protected void clock() {
 
-        clockAlarmButt.setOnClickListener(new View.OnClickListener() {
+        clockButtAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent clock = new Intent(getApplicationContext(), clockAlarmActivity.class);
@@ -90,9 +96,9 @@ public class adminActivity extends AppCompatActivity {
 
     }
 
-    protected void signOut(Button signOutButt) {
+    protected void signOut() {
 
-        signOutButt.setOnClickListener(new View.OnClickListener() {
+        signoutButtAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mAuth.signOut();
@@ -105,7 +111,7 @@ public class adminActivity extends AppCompatActivity {
 
     }
 
-    protected void manage(Button manageButt) {
+    protected void manage() {
 
         manageButt.setOnClickListener(new View.OnClickListener() {
             @Override
