@@ -63,7 +63,7 @@ public class add_accountActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 adminEmail[0] = dataSnapshot.child("email").getValue(String.class);
                 adminPassword[0] = dataSnapshot.child("password").getValue(String.class);
-                Toast.makeText(getApplicationContext(),"user email "+adminEmail[0],Toast.LENGTH_LONG).show();
+
             }
 
             @Override

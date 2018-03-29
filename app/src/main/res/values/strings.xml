@@ -25,4 +25,5 @@
     <string name="light_icon">light_icon</string>
     <string name="choose_a_user_to_delete">Choose a user to delete</string>
     <string name="notification_hestory">Notification Hestory</string>
+    <string name="enter_email_and_password_to_delete_account">Enter Email and password to delete account:</string>
 </resources>
