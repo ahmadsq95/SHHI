@@ -36,6 +36,8 @@ public class adminActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         welcomeTextView = findViewById(R.id.welcomeTextView);
         String user_id = mAuth.getCurrentUser().getUid();
+
+       // get user name and display it on screen
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("account").child(user_id);
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -49,6 +51,8 @@ public class adminActivity extends AppCompatActivity {
 
             }
         });
+
+
         clock();
         notification();
         light();

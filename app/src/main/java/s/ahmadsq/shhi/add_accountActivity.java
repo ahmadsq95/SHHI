@@ -26,21 +26,28 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class add_accountActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-
+    private EditText Email;
+    private  EditText Password;
+    private EditText username;
+    private CheckBox admin;
+    private CheckBox light1;
+    private CheckBox light2;
+    private Button addButt;
+    private ProgressBar spinner;
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_account);
         mAuth = FirebaseAuth.getInstance();
-        final EditText Email = findViewById(R.id.emailAddAccountEditText);
-        final EditText Password = findViewById(R.id.passwordAddAccountEditText);
-        final EditText username = findViewById(R.id.usernameEditText);
-        final CheckBox admin = findViewById(R.id.AdminCheckBox);
-        final CheckBox light1 = findViewById(R.id.light1CheckBox);
-        final CheckBox light2 = findViewById(R.id.light2CheckBox);
-        Button addButt = findViewById(R.id.addButt);
-        final ProgressBar spinner = findViewById(R.id.progressBar2);
+        Email = findViewById(R.id.emailAddAccountEditText);
+        Password = findViewById(R.id.passwordAddAccountEditText);
+        username = findViewById(R.id.usernameEditText);
+        admin = findViewById(R.id.AdminCheckBox);
+        light1 = findViewById(R.id.light1CheckBox);
+        light2 = findViewById(R.id.light2CheckBox);
+        addButt = findViewById(R.id.addButt);
+        spinner = findViewById(R.id.progressBar2);
         spinner.setVisibility(View.GONE);
 
 
@@ -78,7 +85,7 @@ public class add_accountActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()){
-                            Toast.makeText(getBaseContext(),"add Account error",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getBaseContext(),"Account error",Toast.LENGTH_LONG).show();
 
                         }else{
                             Toast.makeText(getBaseContext(),"account added",Toast.LENGTH_LONG).show();

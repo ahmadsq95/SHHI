@@ -1,9 +1,13 @@
 package s.ahmadsq.shhi;
 
+import android.accounts.Account;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,12 +36,11 @@ public class delete_accountActivity extends AppCompatActivity {
     ArrayList<String> list = new ArrayList<>();
     ArrayAdapter<String> adapter ;
     DatabaseReference dref ;
-    EditText emailEditText ;
-    EditText passwordEditText ;
+
     String adminEmail;
     String adminPassword;
     FirebaseAuth mAuth;
-    Button deleteButt ;
+
 
     ProgressBar spinner ;
     @Override
@@ -50,10 +53,9 @@ public class delete_accountActivity extends AppCompatActivity {
 
 
 
-        emailEditText = findViewById(R.id.emailEditText);
-        passwordEditText = findViewById(R.id.passwordEditText);
+
         listView = findViewById(R.id.listView);
-        deleteButt = findViewById(R.id.deleteButt);
+
 
         mAuth = FirebaseAuth.getInstance();
         final String admin_id = mAuth.getCurrentUser().getUid();
@@ -72,15 +74,6 @@ public class delete_accountActivity extends AppCompatActivity {
             }
         });
 
-
-        deleteButt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                deleteUser(emailEditText.getText().toString(),passwordEditText.getText().toString());
-
-            }
-        });
 
 
 
@@ -107,10 +100,11 @@ public class delete_accountActivity extends AppCompatActivity {
 
     public void collectUserInfo (Map<String,Object> notification){
 
-
-        ArrayList<String> userList = new ArrayList<>();
+        final ArrayList<String> usernameList = new ArrayList<>();
+        final ArrayList<String> emailList = new ArrayList<>();
+        final ArrayList<String> passwordList = new ArrayList<>();
          listView = findViewById(R.id.listView);
-        adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item,userList );
+        adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item,usernameList );
         listView.setAdapter(adapter);
 
 
@@ -122,16 +116,57 @@ public class delete_accountActivity extends AppCompatActivity {
             String username = (String) singleUser.get("username");
             String email = (String) singleUser.get("email");
             String password = (String) singleUser.get("password");
-            String emailPassword =username +" Email: "+ email +" Password: "+password;
-            userList.add(emailPassword);
 
+
+            usernameList.add(username);
+            emailList.add(email);
+            passwordList.add(password);
             list.add(notification.toString());
             adapter.notifyDataSetChanged();
         }
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String email = emailList.get(position);
+                String password = passwordList.get(position);
+
+                Toast.makeText(getApplicationContext(),email+" "+password,Toast.LENGTH_SHORT).show();
+                AlertDialog diaBox = AskOption((String) listView.getItemAtPosition(position), email,password);
+                diaBox.show();
+
+            }
+        });
+
 
 
 
     }
+
+
+    private AlertDialog AskOption(final String user,final String email, final String password) {
+               AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+                       .setTitle("Delete user")
+                       .setMessage("Do you want to Delete "+user+" ?")
+                       .setIcon(R.drawable.delete)
+                       .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                          public void onClick(DialogInterface dialog, int whichButton) {
+
+                                        deleteUser(email, password);
+                                        dialog.dismiss();
+
+                                            }})
+
+                       .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int which) {
+
+                                                dialog.dismiss();
+
+                                            }
+              })
+                             .create();
+                return myQuittingDialogBox;
+
+                    }
 
     private void deleteUser (String email , String password){
         spinner.setVisibility(View.VISIBLE);

@@ -8,12 +8,14 @@ import android.widget.Button;
 
 public class manageActivity extends AppCompatActivity {
 
+    private Button addAccountButt;
+    private Button deleteAccountButt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage);
-        Button addAccountButt = findViewById(R.id.addAccountButt);
-        Button deleteAccountButt = findViewById(R.id.deleteAccountButt);
+        addAccountButt = findViewById(R.id.addAccountButt);
+        deleteAccountButt = findViewById(R.id.deleteAccountButt);
 
         addAccountButt.setOnClickListener(new View.OnClickListener() {
             @Override
