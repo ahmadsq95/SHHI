@@ -39,67 +39,76 @@ public class loginActivity extends AppCompatActivity {
         spinner = findViewById(R.id.progressBar);
 
 
-        login();
+        final String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        spinner.setVisibility(View.GONE);
+        loginButt.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        String email = emailEditText.getText().toString();
+        if (email.matches(emailPattern)){
+            if (passwordEditText.getText().length() >= 6){
+                spinner.setVisibility(View.VISIBLE);
+                login();
+            }else {
+                Toast.makeText(getApplicationContext(),"password should be at least 6 digit.",Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            Toast.makeText(getApplicationContext(),"Enter Valid email address.",Toast.LENGTH_SHORT).show();
+        }
+
+    }
+});
+
 
 
 
     }
 
     public void login (){
-
         spinner.setVisibility(View.GONE);
         mAuth = FirebaseAuth.getInstance();
-        loginButt.setOnClickListener(new View.OnClickListener() {
+        spinner.setVisibility(View.VISIBLE);
+        mAuth.signInWithEmailAndPassword(emailEditText.getText().toString(),passwordEditText.getText().toString()).addOnCompleteListener(loginActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
-            public void onClick(View view) {
-
-                spinner.setVisibility(View.VISIBLE);
-                mAuth.signInWithEmailAndPassword(emailEditText.getText().toString(),passwordEditText.getText().toString()).addOnCompleteListener(loginActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (!task.isSuccessful()){
-                            Toast.makeText(getBaseContext(),"sign in error",Toast.LENGTH_LONG).show();
-                            spinner.setVisibility(View.GONE);
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (!task.isSuccessful()){
+                    Toast.makeText(getBaseContext(),"sign in error",Toast.LENGTH_LONG).show();
+                    spinner.setVisibility(View.GONE);
+                }
+                else {
+                    String user_id = mAuth.getCurrentUser().getUid();
+                    DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("admin");
+                    current_user_db.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String admin = dataSnapshot.getValue(String.class);
+                            if (admin.equals("yes")){
+                                spinner.setVisibility(View.GONE);
+                                FirebaseMessaging.getInstance().subscribeToTopic("arduino");
+                                Intent log = new Intent(getApplicationContext(),adminActivity.class);
+                                log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(log);
+                            }
+                            else {
+                                spinner.setVisibility(View.GONE);
+                                FirebaseMessaging.getInstance().subscribeToTopic("arduino");
+                                Intent log = new Intent(getApplicationContext(),MainActivity.class);
+                                log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(log);
+                            }
                         }
-                        else {
-                            String user_id = mAuth.getCurrentUser().getUid();
-                            DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("admin");
-                            current_user_db.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    String admin = dataSnapshot.getValue(String.class);
-                                    if (admin.equals("yes")){
 
-                                        spinner.setVisibility(View.GONE);
-                                        FirebaseMessaging.getInstance().subscribeToTopic("arduino");
-                                        Intent log = new Intent(getApplicationContext(),adminActivity.class);
-                                        log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(log);
-                                    }
-                                    else {
-
-                                        spinner.setVisibility(View.GONE);
-                                        FirebaseMessaging.getInstance().subscribeToTopic("arduino");
-                                        Intent log = new Intent(getApplicationContext(),MainActivity.class);
-                                        log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(log);
-                                    }
-
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
                         }
-                    }
-                });
+                    });
 
+
+                }
             }
         });
+
     }
 
 

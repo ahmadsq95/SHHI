@@ -1,6 +1,5 @@
 package s.ahmadsq.shhi;
 
-import android.accounts.Account;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,12 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -98,7 +94,7 @@ public class delete_accountActivity extends AppCompatActivity {
         });
     }
 
-    public void collectUserInfo (Map<String,Object> notification){
+    public void collectUserInfo (Map<String,Object> users){
 
         final ArrayList<String> usernameList = new ArrayList<>();
         final ArrayList<String> emailList = new ArrayList<>();
@@ -110,7 +106,7 @@ public class delete_accountActivity extends AppCompatActivity {
 
 
 
-        for (Map.Entry<String,Object>  entry : notification.entrySet()){
+        for (Map.Entry<String,Object>  entry : users.entrySet()){
 
             Map singleUser = (Map) entry.getValue();
             String username = (String) singleUser.get("username");
@@ -121,7 +117,7 @@ public class delete_accountActivity extends AppCompatActivity {
             usernameList.add(username);
             emailList.add(email);
             passwordList.add(password);
-            list.add(notification.toString());
+            list.add(users.toString());
             adapter.notifyDataSetChanged();
         }
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -130,7 +126,6 @@ public class delete_accountActivity extends AppCompatActivity {
                 String email = emailList.get(position);
                 String password = passwordList.get(position);
 
-                Toast.makeText(getApplicationContext(),email+" "+password,Toast.LENGTH_SHORT).show();
                 AlertDialog diaBox = AskOption((String) listView.getItemAtPosition(position), email,password);
                 diaBox.show();
 

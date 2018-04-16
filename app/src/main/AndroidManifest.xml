@@ -19,7 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".loginActivity" />
+        <activity android:name=".loginActivity"
+                  android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".lightActivity" />
         <activity android:name=".notificationActivity" />
         <activity android:name=".manageActivity" />
@@ -31,7 +32,7 @@
 
 
 
-        <service android:name=".MyFirebaseMessagingService">
+        <service android:name=".NotificationService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

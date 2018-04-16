@@ -18,6 +18,7 @@ public class Singleton_Queue {
     private Context context;
 
     private Singleton_Queue(Context context) {
+
         this.context = context;
     }
 

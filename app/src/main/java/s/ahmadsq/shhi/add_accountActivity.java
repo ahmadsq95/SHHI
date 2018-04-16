@@ -74,63 +74,85 @@ public class add_accountActivity extends AppCompatActivity {
         addButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                spinner.setVisibility(View.VISIBLE);
 
-                final String email = Email.getText().toString();
+                final String email = Email.getText().toString().trim();
+                final String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
                 final String password = Password.getText().toString();
+               if (email.matches(emailPattern)){
+                   if (password.length() >=6){
+                       addAccount(adminEmail,adminPassword);
+                   }else {
+                       Toast.makeText(getApplicationContext(),"password should be at least 6 characters.",Toast.LENGTH_SHORT).show();
+                   }
+               }else {
+                   Toast.makeText(getApplicationContext(),"Invalid email.",Toast.LENGTH_SHORT).show();
+               }
 
 
-                // create the account
-                mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(add_accountActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (!task.isSuccessful()){
-                            Toast.makeText(getBaseContext(),"Account error",Toast.LENGTH_LONG).show();
 
-                        }else{
-                            Toast.makeText(getBaseContext(),"account added",Toast.LENGTH_LONG).show();
-                            String user_id = mAuth.getCurrentUser().getUid();
-                           // add user Id to database
-                            DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id);
-                            current_user_db.setValue(true);
-                            // add email to database
-                            current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("email");
-                            current_user_db.setValue(email);
-                           // add username to database
-                            current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("username");
-                            current_user_db.setValue(username.getText().toString());
-                            // add password to database
-                            current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("password");
-                            current_user_db.setValue(Password.getText().toString());
-                                // add admin or user to database
-                            if (admin.isChecked()){
-                                current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("admin");
-                                current_user_db.setValue("yes");
-                                spinner.setVisibility(View.GONE);
-                            }else {
-                                current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("admin");
-                                current_user_db.setValue("no");
-                                spinner.setVisibility(View.GONE);
-                            }
-                            // add light1 privilage to database
-                            if (light1.isChecked()){
-                                current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("light1");
-                                current_user_db.setValue("yes");
-                            }else{
-                                current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("light1");
-                                current_user_db.setValue("no");
-                            }
-                            // add light1 privilage to database
-                            if (light2.isChecked()){
-                                current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("light2");
-                                current_user_db.setValue("yes");
-                            }else{
-                                current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("light2");
-                                current_user_db.setValue("no");
-                            }
-                        }
+
+
+
+            }
+        });
+
+
+    }
+    public void addAccount ( String[] adminEmail,  String[] adminPassword){
+        spinner.setVisibility(View.VISIBLE);
+        final String email = Email.getText().toString().trim();
+        final String password = Password.getText().toString();
+        // create the account
+        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(add_accountActivity.this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (!task.isSuccessful()){
+                    Toast.makeText(getBaseContext(),"Account error",Toast.LENGTH_LONG).show();
+
+                }else{
+                    Toast.makeText(getBaseContext(),"account added",Toast.LENGTH_LONG).show();
+                    String user_id = mAuth.getCurrentUser().getUid();
+                    // add user Id to database
+                    DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id);
+                    current_user_db.setValue(true);
+                    // add email to database
+                    current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("email");
+                    current_user_db.setValue(email);
+                    // add username to database
+                    current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("username");
+                    current_user_db.setValue(username.getText().toString());
+                    // add password to database
+                    current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("password");
+                    current_user_db.setValue(Password.getText().toString());
+                    // add admin or user to database
+                    if (admin.isChecked()){
+                        current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("admin");
+                        current_user_db.setValue("yes");
+                        spinner.setVisibility(View.GONE);
+                    }else {
+                        current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("admin");
+                        current_user_db.setValue("no");
+                        spinner.setVisibility(View.GONE);
                     }
-                });
+                    // add light1 privilage to database
+                    if (light1.isChecked()){
+                        current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("light1");
+                        current_user_db.setValue("yes");
+                    }else{
+                        current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("light1");
+                        current_user_db.setValue("no");
+                    }
+                    // add light1 privilage to database
+                    if (light2.isChecked()){
+                        current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("light2");
+                        current_user_db.setValue("yes");
+                    }else{
+                        current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("light2");
+                        current_user_db.setValue("no");
+                    }
+                }
+            }
+        });
 
 
 
@@ -142,20 +164,15 @@ public class add_accountActivity extends AppCompatActivity {
                 *
                  */
 
-                // sign out from the new user
-                mAuth.signOut();
-                //sign in with original user
-              //  EditText email1 = findViewById(R.id.emailEditText);
-               // EditText password1 = findViewById(R.id.passwordEditText);
+        // sign out from the new user
+        mAuth.signOut();
+        //sign in with original user
+        //  EditText email1 = findViewById(R.id.emailEditText);
+        // EditText password1 = findViewById(R.id.passwordEditText);
 
 
-                        mAuth.signInWithEmailAndPassword(adminEmail[0],adminPassword[0]);
-                            spinner.setVisibility(View.GONE);
-
-            }
-        });
-
-
+        mAuth.signInWithEmailAndPassword(adminEmail[0],adminPassword[0]);
+        spinner.setVisibility(View.GONE);
     }
 
 }

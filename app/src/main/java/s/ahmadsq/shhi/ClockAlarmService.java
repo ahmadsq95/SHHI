@@ -44,16 +44,8 @@ public class ClockAlarmService extends Service {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         // get extra string from alarm receiver
         String state = intent.getExtras().getString("extra");
-
-
-
-
-
-
-
         assert state != null;
         switch (state) {
             case "alarm on":
@@ -66,8 +58,6 @@ public class ClockAlarmService extends Service {
                 startId = 0;
                 break;
         }
-
-
         // if there no alarming is running , and user pressed "set" button
         // alarming should run
         if (!this.isRunning && startId == 1){
@@ -90,7 +80,7 @@ public class ClockAlarmService extends Service {
 
 
                // turn on house clock light
-               requestArduinoLight("clock alarm", "on");
+               requestArduinoLight("LED3", "ON");
 
             this.isRunning = true;
             this.startId = 0 ;
@@ -128,7 +118,7 @@ public class ClockAlarmService extends Service {
             mp.reset();
             vibrator.cancel();
            // turn off house clock light
-            requestArduinoLight("clock alarm", "off");
+            requestArduinoLight("LED3", "OFF");
             isRunning = false;
             this.startId = 1 ;
         }
@@ -168,7 +158,7 @@ public class ClockAlarmService extends Service {
     public void requestArduinoLight (final String clockLight, final String command){
 
 
-       StringRequest requset = new StringRequest(Request.Method.POST, "http://192.168.1.111", new Response.Listener<String>() {
+       StringRequest requset = new StringRequest(Request.Method.GET, "http://192.168.8.100/"+clockLight+"="+command, new Response.Listener<String>() {
            @Override
            public void onResponse(String response) {
                 // here get json object to know if light set on or off , just to know it
@@ -179,19 +169,9 @@ public class ClockAlarmService extends Service {
                Toast.makeText(getApplicationContext(),"Error to connect the server", Toast.LENGTH_LONG).show();
 
            }
-       }){
-            protected Map<String,String> getParams() throws AuthFailureError {
-                HashMap<String,String> map=new HashMap<>();
-                map.put("light",clockLight);
-                map.put("command",command);
-                return map;
-            }
-
-
-       };
+       });
         Singleton_Queue.getInstance(getBaseContext()).Add(requset);
     }
-
 
 }
 

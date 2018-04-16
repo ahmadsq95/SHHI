@@ -63,9 +63,9 @@ public class lightActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (light1ToggleButt.isChecked()){
-                    send_request("light1","on");
+                    send_request("LED1","ON");
                 }else if (!light1ToggleButt.isChecked()){
-                    send_request("light1","off");
+                    send_request("LED1","OFF");
                 }
             }
         });
@@ -75,9 +75,9 @@ public class lightActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (light2ToggleButt.isChecked()){
-                    send_request("light2","on");
+                    send_request("LED2","ON");
                 }else if (!light2ToggleButt.isChecked()){
-                    send_request("light2","off");
+                    send_request("LED2","OFF");
                 }
             }
         });
@@ -86,8 +86,6 @@ public class lightActivity extends AppCompatActivity {
 
     // check if user have access to control the light if is set the button visible otherwise set it invisible
     public void checkPrivilege (){
-
-
         user_id = mAuth.getCurrentUser().getUid();
         user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id);
         user_db.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -155,29 +153,18 @@ public class lightActivity extends AppCompatActivity {
     // request Arduino to control the light
     public void send_request (final String lightNo , final String command){
 
-        StringRequest requset = new StringRequest(Request.Method.POST, "http://192.168.1.111", new Response.Listener<String>() {
+        StringRequest requset = new StringRequest(Request.Method.GET, "http://192.168.8.100/"+lightNo+"="+command, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                // here get json object to know if light set on or off , just to know it
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(getApplicationContext(),"Error to connect the server", Toast.LENGTH_LONG).show();
-
             }
-        }){
-            protected Map<String,String> getParams() throws AuthFailureError {
-                HashMap<String,String> map=new HashMap<>();
-                map.put("light",lightNo);
-                map.put("command",command);
-                return map;
-            }
-
-
-        };
+        });
         Singleton_Queue.getInstance(getBaseContext()).Add(requset);
-
             }
 
 
