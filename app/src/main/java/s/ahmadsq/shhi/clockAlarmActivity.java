@@ -35,13 +35,13 @@ public class clockAlarmActivity extends AppCompatActivity {
         // initialize alarm manager
         alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
         // initialize time picker
-        alarm_timpicker = (TimePicker) findViewById(R.id.timePicker);
+        alarm_timpicker = findViewById(R.id.timePicker);
         // initialize text update box
-        time_update_text = (TextView) findViewById(R.id.time_update_text);
+        time_update_text = findViewById(R.id.time_update_text);
         // Create an instance of calender
         final Calendar calendar = Calendar.getInstance();
         //  initialize a vibrator
-       final Vibrator vv = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
         // initialize intent to the Alarm receiver
         final Intent AlarmReceiver_intent = new Intent(this.context, Alarm_Receiver.class);
 
@@ -57,8 +57,7 @@ public class clockAlarmActivity extends AppCompatActivity {
         setButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Vibrate for 500 milliseconds
-                vv.vibrate(50);
+
 
 
                 // setting time that user input to calendar instance
@@ -69,7 +68,7 @@ public class clockAlarmActivity extends AppCompatActivity {
                 int minute = alarm_timpicker.getCurrentMinute();
                 String hour_string = String.valueOf(hour);
                 String minute_string = String.valueOf(minute);
-                String AM_PM = null ;
+                String AM_PM;
 
                 // change 24 Hour mode to 12 Hour mood and get AM amd PM
                 if (hour > 12){
@@ -93,12 +92,10 @@ public class clockAlarmActivity extends AppCompatActivity {
 
                 // create a pending intent that delay intent
                 // until the specified time
-                pending_intent = PendingIntent.getBroadcast(clockAlarmActivity.this,0,
-                        AlarmReceiver_intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                pending_intent = PendingIntent.getBroadcast(clockAlarmActivity.this,0, AlarmReceiver_intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
                 // set the alarm manager
-                alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
-                        pending_intent);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending_intent);
 
 
             }
@@ -112,8 +109,7 @@ public class clockAlarmActivity extends AppCompatActivity {
         unsetButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Vibrate for 500 milliseconds
-                vv.vibrate(50);
+
 
                 // cancel the alarm
                 alarmManager.cancel(pending_intent);

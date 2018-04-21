@@ -1,5 +1,7 @@
 package s.ahmadsq.shhi;
 
+import android.content.Intent;
+
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;

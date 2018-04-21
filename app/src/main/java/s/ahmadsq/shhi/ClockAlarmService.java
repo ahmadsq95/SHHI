@@ -8,21 +8,16 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static android.support.v4.app.NotificationCompat.PRIORITY_MAX;
 
@@ -45,18 +40,23 @@ public class ClockAlarmService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // get extra string from alarm receiver
-        String state = intent.getExtras().getString("extra");
-        assert state != null;
-        switch (state) {
-            case "alarm on":
-                startId = 1;
-                break;
-            case "alarm off":
-                startId = 0;
-                break;
-            default:
-                startId = 0;
-                break;
+        try {
+            String state = intent.getExtras().getString("extra");
+            assert state != null;
+            switch (state) {
+                case "alarm on":
+                    startId = 1;
+                    break;
+                case "alarm off":
+                    startId = 0;
+                    break;
+                default:
+                    startId = 0;
+                    break;
+            }
+
+        }catch (NullPointerException e){
+            System.out.println(e);
         }
         // if there no alarming is running , and user pressed "set" button
         // alarming should run
@@ -74,13 +74,17 @@ public class ClockAlarmService extends Service {
                     0,  // Start immediately
                     vab, gap
             };
-            vibrator.vibrate(pattern,1); // 1 is for repeat like a loop
+       try{
+           vibrator.vibrate(pattern,1); // 1 is for repeat like a loop
+       }catch (NullPointerException e){
+           System.out.println(e);
+       }
 
 
 
 
                // turn on house clock light
-               requestArduinoLight("LED3", "ON");
+               requestArduinoLight("ON");
 
             this.isRunning = true;
             this.startId = 0 ;
@@ -103,8 +107,11 @@ public class ClockAlarmService extends Service {
 
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(0, notificationBuilder.build());
-
+           try {
+               notificationManager.notify(0, notificationBuilder.build());
+           }catch (NullPointerException e){
+               System.out.println(e);
+           }
 
 
 
@@ -118,16 +125,20 @@ public class ClockAlarmService extends Service {
             mp.reset();
             vibrator.cancel();
            // turn off house clock light
-            requestArduinoLight("LED3", "OFF");
+            requestArduinoLight("OFF");
             isRunning = false;
             this.startId = 1 ;
         }
 
-        // these are if the user pressed any button
-        // just for bug-proof app :)
+        /*
 
-        // if there no alarming is running and user pressed "unset"
-        // do nothing
+        these are if the user pressed any button
+        just for bug-proof app :)
+        if there no alarming is running and user pressed "unset"
+        do nothing
+
+        */
+
         else if (!isRunning && startId == 0){
 
             this.isRunning = false ;
@@ -155,10 +166,10 @@ public class ClockAlarmService extends Service {
 
     }
 
-    public void requestArduinoLight (final String clockLight, final String command){
+    public void requestArduinoLight(final String command){
 
 
-       StringRequest requset = new StringRequest(Request.Method.GET, "http://192.168.8.100/"+clockLight+"="+command, new Response.Listener<String>() {
+       StringRequest requset = new StringRequest(Request.Method.GET, "http://192.168.8.101/"+ "LED3" +"="+command, new Response.Listener<String>() {
            @Override
            public void onResponse(String response) {
                 // here get json object to know if light set on or off , just to know it
