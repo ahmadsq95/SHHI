@@ -54,6 +54,7 @@ public class delete_accountActivity extends AppCompatActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
+       try{
         final String admin_id = mAuth.getCurrentUser().getUid();
         DatabaseReference admin_db = FirebaseDatabase.getInstance().getReference().child("account").child(admin_id);
 
@@ -70,11 +71,14 @@ public class delete_accountActivity extends AppCompatActivity {
             }
         });
 
+       }catch (NullPointerException e){
+           System.out.println(e);
+       }
 
 
 
 
-             getData();
+        getData();
 
     }
 

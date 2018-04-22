@@ -76,36 +76,40 @@ public class loginActivity extends AppCompatActivity {
                     spinner.setVisibility(View.GONE);
                 }
                 else {
-                    String user_id = mAuth.getCurrentUser().getUid();
-                    DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("admin");
-                    current_user_db.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            String admin = dataSnapshot.getValue(String.class);
-                            if (admin.equals("yes")){
-                                spinner.setVisibility(View.GONE);
-                                FirebaseMessaging.getInstance().subscribeToTopic("arduino");
-                                Intent log = new Intent(getApplicationContext(),adminActivity.class);
-                                log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(log);
-                            }
-                            else {
-                                spinner.setVisibility(View.GONE);
-                                FirebaseMessaging.getInstance().subscribeToTopic("arduino");
-                                Intent log = new Intent(getApplicationContext(),MainActivity.class);
-                                log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(log);
-                            }
-                        }
+                  try{
+                      String user_id = mAuth.getCurrentUser().getUid();
+                      DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("account").child(user_id).child("admin");
+                      current_user_db.addListenerForSingleValueEvent(new ValueEventListener() {
+                          @Override
+                          public void onDataChange(DataSnapshot dataSnapshot) {
+                              String admin = dataSnapshot.getValue(String.class);
+                              if (admin.equals("yes")) {
+                                  spinner.setVisibility(View.GONE);
+                                  FirebaseMessaging.getInstance().subscribeToTopic("arduino");
+                                  Intent log = new Intent(getApplicationContext(), adminActivity.class);
+                                  log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                  startActivity(log);
+                              } else {
+                                  spinner.setVisibility(View.GONE);
+                                  FirebaseMessaging.getInstance().subscribeToTopic("arduino");
+                                  Intent log = new Intent(getApplicationContext(), MainActivity.class);
+                                  log.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                  startActivity(log);
+                              }
+                          }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                          @Override
+                          public void onCancelled(DatabaseError databaseError) {
 
-                        }
-                    });
+                          }
+                      });
+
+                  }catch (NullPointerException e){
+                      System.out.println(e);
+                  }
 
 
-                }
+                   }
             }
         });
 

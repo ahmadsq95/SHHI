@@ -29,21 +29,25 @@ public class MainActivity extends AppCompatActivity {
         Button lightButt = findViewById(R.id.lightButt);
         Button signOutButt = findViewById(R.id.signoutButt);
         final TextView welcomeTextView = findViewById(R.id.welcomeTextView);
-        String user_id = mAuth.getCurrentUser().getUid();
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("account").child(user_id);
-        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String username = dataSnapshot.child("username").getValue(String.class);
-                welcomeTextView.setText(username);
-            }
+      try {
+          String user_id = mAuth.getCurrentUser().getUid();
+          DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("account").child(user_id);
+          dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+              @Override
+              public void onDataChange(DataSnapshot dataSnapshot) {
+                  String username = dataSnapshot.child("username").getValue(String.class);
+                  welcomeTextView.setText(username);
+              }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+              @Override
+              public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+              }
+          });
 
+      }catch (NullPointerException e){
+          System.out.println(e);
+      }
         clock(clockAlarmButt);
         notification(notificationButt);
         light(lightButt);

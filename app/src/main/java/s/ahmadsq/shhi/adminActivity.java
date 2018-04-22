@@ -35,24 +35,27 @@ public class adminActivity extends AppCompatActivity {
         manageButt = findViewById(R.id.manageButt);
         mAuth = FirebaseAuth.getInstance();
         welcomeTextView = findViewById(R.id.welcomeTextView);
-        String user_id = mAuth.getCurrentUser().getUid();
+      try {
+          String user_id = mAuth.getCurrentUser().getUid();
 
-       // get user name and display it on screen
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("account").child(user_id);
-        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String username = dataSnapshot.child("username").getValue(String.class);
-                welcomeTextView.setText(username);
-            }
+          // get user name and display it on screen
+          DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("account").child(user_id);
+          dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+              @Override
+              public void onDataChange(DataSnapshot dataSnapshot) {
+                  String username = dataSnapshot.child("username").getValue(String.class);
+                  welcomeTextView.setText(username);
+              }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+              @Override
+              public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+              }
+          });
 
-
+      }catch (NullPointerException e){
+          System.out.println(e);
+      }
         clock();
         notification();
         light();
